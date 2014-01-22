@@ -3,7 +3,7 @@
 
 testDetectWithPackageJson() {
   detect "stable-node"
-  assertCaptured "Node.js"
+  assertCaptured "Strider"
   assertCapturedSuccess
 }
 
