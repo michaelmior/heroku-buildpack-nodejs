@@ -122,3 +122,23 @@ echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\
     https://nomnom.heroku.com/?request_id=$REQUEST_ID \
     > /dev/null
 ) &
+
+# Heroku Revision.
+#
+# Affixed to all vendored binary output to represent changes to the
+# compilation environment without a change to the upstream version,
+# e.g. PHP 5.3.27 without, and then subsequently with, libmcrypt.
+heroku_rev='-2'
+
+MCRYPT_VERSION="2.5.8"
+PHP_VERSION="5.3.27"
+
+MCRYPT_URL="https://heroku-buildpack-php.s3.amazonaws.com/mcrypt-""$MCRYPT_VERSION""$heroku_rev"".tar.gz"
+echo "-----> Bundling mcrypt version $MCRYPT_VERSION"
+curl --silent --max-time 60 --location "$MCRYPT_URL" | tar xz
+
+PHP_URL="https://heroku-buildpack-php.s3.amazonaws.com/php-$PHP_VERSION""$heroku_rev"".tar.gz"
+echo "-----> Bundling PHP version $PHP_VERSION"
+curl --silent --max-time 60 --location "$PHP_URL" | tar xz
+
+ln -s /app/php/bin/php bin/php
